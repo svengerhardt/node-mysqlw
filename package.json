@@ -1,0 +1,33 @@
+{
+  "name": "mysqlw",
+  "version": "0.12.1",
+  "description": "Wrapper for node-mysql to simplify queries",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "babel es6 --out-dir dist --no-comments",
+    "prepublish": "npm run build"
+  },
+  "author": "Sven Gerhardt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/svengerhardt/node-mysqlw.git"
+  },
+  "bugs": {
+    "url": "https://github.com/svengerhardt/node-mysqlw/issues"
+  },
+  "homepage": "https://github.com/svengerhardt/node-mysqlw#readme",
+  "keywords": [
+    "mysql",
+    "database",
+    "query",
+    "wrapper"
+  ],
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-latest": "^6.16.0"
+  },
+  "dependencies": {
+    "mysql": "^2.12.0"
+  }
+}
