@@ -1,6 +1,6 @@
 {
   "name": "mysqlw",
-  "version": "0.12.2",
+  "version": "0.13.1",
   "description": "Wrapper for node-mysql to simplify queries",
   "main": "./dist/index.js",
   "scripts": {
@@ -19,9 +19,9 @@
   "homepage": "https://github.com/svengerhardt/node-mysqlw#readme",
   "keywords": [
     "mysql",
-    "database",
+    "wrapper",
     "query",
-    "wrapper"
+    "transaction"
   ],
   "devDependencies": {
     "babel-cli": "^6.18.0",
