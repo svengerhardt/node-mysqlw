@@ -1,6 +1,6 @@
 # mysqlw
 
-Wrapper for [node-mysql](https://github.com/mysqljs/mysql) to simplify queries.
+A lightweight wrapper for [node-mysql](https://github.com/mysqljs/mysql) to simplify queries.
 
 ## Installation
 
@@ -22,38 +22,62 @@ let config = {
 };
 ```
 
-For more connection options see: [node-mysql connection-options](https://github.com/mysqljs/mysql#connection-options)
+For more `connection` options see: [connection-options](https://github.com/mysqljs/mysql#connection-options)
 
-## Usage
-
-**Performing queries**
+## Example Usage
 
 ```js
+"use strict";
+
 let co = require("co");
 
-let Database = require("mysqlw").Database;
+let Database = require("mysqlw");
 let db = new Database(config);
 
 co (function *() {
 
-    let result = null;
-
-    result = yield db.query("DELETE FROM core_users");
-    result = yield db.query("INSERT INTO core_users SET ?", {"userName": "bob", "givenName": "Bob", "familyName": "Schmidt"});
-    result = yield db.query("UPDATE core_users SET ? WHERE id=" + result.insertId, {"userName": "bobby"});
-    result = yield db.query("SELECT * FROM core_users");
-                
+    yield db.beginTransaction();
+    yield db.query("INSERT INTO users SET ?", {"userName": "bob", ... });
+    yield db.query("INSERT INTO users SET ?", {"userName": "tom", ... });
+    yield db.endTransaction();
+        
+    let result = yield db.query("SELECT * FROM users");
     console.log(result);
         
 }).catch ((error) => {
-    console.error(error);
+    // error;
 });
 ```
 
-**Establishing a connection**
+To use plain ES6 `require("mysqlw/es6")`
+
+## Promises
+
+Parameters marked with (*) are optional:
+
+* query(sql, *values)
+* beginTransaction()
+* endTransaction()
+
+**Example**
 
 ```js
-let Database = require("mysqlw").Database;
+db.query("INSERT INTO users SET ?", {"userName": "bob", ...}).then((result) => {
+    // result
+}, (error) => {
+    // error
+});
+```
+
+## Functions
+
+* getConnection(callback)
+* endConnection(connection)
+
+**Example**
+
+```js
+let Database = require("mysqlw");
 let db = new Database(config);
 
 db.getConnection((error, connection) => {
@@ -64,46 +88,4 @@ db.getConnection((error, connection) => {
 });
 ```
 
-## Functions
-
-#### query(sql, values)
-
-Performing queries.
-
-**Example**
-
-```js
-db.query("INSERT INTO core_users SET ?", {"userName": "bob"}).then((result) => {
-    console.log(result.insertId);
-}, (error) => {
-    console.error(error);
-});
-```
-
----
-
-#### getConnection(callback)
-
-Establishing a connection.
-
-**Example**
-
-```js
-db.getConnection((error, connection) => {
-    // do something with connection
-});    
-```
-
----
-
-#### endConnection(connection)
-
-Terminating a connection. If `config.pooling: true` the connection will return to the pool.
-
-**Example**
-
-```js
-db.endConnection(connection);  
-```
-
----
+endConnection(connection) - if `config.pooling: true` the connection will return to the pool.
