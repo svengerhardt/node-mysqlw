@@ -27,8 +27,6 @@ For more `connection` options see: [connection-options](https://github.com/mysql
 ## Example Usage
 
 ```js
-"use strict";
-
 let co = require("co");
 
 let Database = require("mysqlw");
@@ -58,6 +56,7 @@ Parameters marked with (*) are optional:
 * query(sql, *values)
 * beginTransaction()
 * endTransaction()
+* rollback(*error);
 
 **Example**
 
