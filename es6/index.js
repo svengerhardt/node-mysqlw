@@ -105,6 +105,24 @@ class MySQLWrapper {
             resolve();
         });
     }
+
+    rollback(error) {
+        return new Promise((resolve, reject) => {
+            if (this._transactionConnection) {
+                return this._transactionConnection.rollback(() => {
+                    this.endConnection(this._transactionConnection);
+                    if (error) {
+                        reject(error);
+                    } else {
+                        reject();
+                    }
+                });
+            } else {
+                resolve();
+            }
+        });
+    }
+
 }
 
 module.exports = MySQLWrapper;
