@@ -35,8 +35,8 @@ let db = new Database(config);
 co (function *() {
 
     yield db.beginTransaction();
-    yield db.query("INSERT INTO users SET ?", {"userName": "bob", ... });
-    yield db.query("INSERT INTO users SET ?", {"userName": "tom", ... });
+    yield db.query("INSERT INTO users SET ?", {"userName": "bob"});
+    yield db.query("INSERT INTO users SET ?", {"userName": "tom"});
     yield db.endTransaction();
         
     let result = yield db.query("SELECT * FROM users");
@@ -46,8 +46,6 @@ co (function *() {
     // error;
 });
 ```
-
-To use plain ES6 `require("mysqlw/es6")`
 
 ## Promises
 
@@ -61,30 +59,9 @@ Parameters marked with (*) are optional:
 **Example**
 
 ```js
-db.query("INSERT INTO users SET ?", {"userName": "bob", ...}).then((result) => {
+db.query("UPDATE users SET ? WHERE id=?", [{"userName":"Bobby"}, 1]).then((result) => {
     // result
 }, (error) => {
     // error
 });
 ```
-
-## Functions
-
-* getConnection(callback)
-* endConnection(connection)
-
-**Example**
-
-```js
-let Database = require("mysqlw");
-let db = new Database(config);
-
-db.getConnection((error, connection) => {
-    connection.query("... SQL QUERY ...", (error, rows) => {
-        db.endConnection(connection);
-        // do someting with rows
-    });
-});
-```
-
-endConnection(connection) - if `config.pooling: true` the connection will return to the pool.
