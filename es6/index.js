@@ -36,8 +36,9 @@ class MySQLWrapper {
             }
         } else {
             if (connection) {
+                this._transactionConnection = null;
                 connection.end((error) => {
-                    this._transactionConnection = null;
+                    // do nothing
                 });
             }
         }
@@ -93,23 +94,22 @@ class MySQLWrapper {
             if (this._transactionConnection) {
                 this._transactionConnection.commit((error) => {
                     if (error) {
-                        return this._transactionConnection.rollback(() => {
-                            this.endConnection(this._transactionConnection);
-                            reject(error);
-                        });
+                        return this.rollback(error);
                     } else {
                         this.endConnection(this._transactionConnection);
+                        resolve();
                     }
                 });
+            } else {
+                resolve();
             }
-            resolve();
         });
     }
 
     rollback(error) {
         return new Promise((resolve, reject) => {
             if (this._transactionConnection) {
-                return this._transactionConnection.rollback(() => {
+                this._transactionConnection.rollback(() => {
                     this.endConnection(this._transactionConnection);
                     if (error) {
                         reject(error);
@@ -122,7 +122,6 @@ class MySQLWrapper {
             }
         });
     }
-
 }
 
 module.exports = MySQLWrapper;
