@@ -1,3 +1,5 @@
+"use strict";
+
 let mysql = require("mysql");
 
 class MySQLWrapper {
