@@ -46,6 +46,16 @@ class MySQLWrapper {
         }
     }
 
+    close(callback) {
+        if (this._pool != null) {
+            this._pool.end(callback);
+        } else {
+            if (typeof callback === "function") {
+                callback();
+            }
+        }
+    }
+
     query(sql, values) {
         return new Promise((resolve, reject) => {
             this.getConnection((error, connection) => {
